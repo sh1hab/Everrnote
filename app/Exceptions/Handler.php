@@ -47,4 +47,21 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    /**
+     * Report or log an exception.
+     *
+     * @param  \Throwable  $e
+     * @return void
+     *
+     * @throws \Throwable
+     */
+    public function report(Throwable $exception)
+    {
+        if (env('APP_ENV') != 'local' && $this->shouldReport($exception) && app()->bound('sentry')) {
+            app('sentry')->captureException($exception);
+        }
+
+        parent::report($exception);
+    }
 }
