@@ -20,8 +20,8 @@ const routes = [
         meta: {requiresAuth: true}
     },
     {
-        path: '/login',
-        redirect: '/dashboard',
+        path: '/auth',
+        redirect: '/login',
         name: 'Auth',
         component: AuthLayout,
         meta: {requiresAuth: false, isGuest: true},
@@ -37,6 +37,11 @@ const routes = [
                 component: Register,
             }
         ]
+    },
+    {
+        path: '/logout',
+        name: 'Logout',
+        meta: {requiresAuth: true}
     },
 
 ];
