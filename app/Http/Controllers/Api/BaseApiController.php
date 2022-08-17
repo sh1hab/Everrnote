@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Log;
 use Closure;
@@ -23,10 +24,10 @@ abstract class BaseApiController extends BaseController
      * Return success response
      *
      * @param mixed $result Data to be sent as response
-     * @param bool $wrapped States whether or not $result should be wrapped in a 'data' field
+     * @param bool $wrapped States whether $result should be wrapped in a 'data' field
      *                        If false it will be merged into the main object
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function sendResponse($result = [], $wrapped = true)
     {
@@ -61,7 +62,7 @@ abstract class BaseApiController extends BaseController
     /**
      * Return error response.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function sendError($errorMessages = [], $code = 400)
     {
