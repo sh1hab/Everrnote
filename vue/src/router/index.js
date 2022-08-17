@@ -41,7 +41,8 @@ const routes = [
     {
         path: '/logout',
         name: 'Logout',
-        meta: {requiresAuth: true}
+        meta: {requiresAuth: true},
+
     },
 
 ];
@@ -55,6 +56,8 @@ router.beforeEach((to, from, next) => {
     if (!store.state.user.token && to.meta.requiresAuth) {
         next({name: 'Login'});
     } else if (store.state.user.token && to.meta.isGuest) {
+        console.clear();
+        console.log(store.state.user.token);
         next({path: 'Dashboard', 'message': 'You are already logged in'});
     } else {
         next();
