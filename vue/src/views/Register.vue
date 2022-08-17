@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
     <div>
         <img alt="Workflow" class="mx-auto h-12 w-auto"
@@ -14,12 +10,12 @@
             </router-link>
         </p>
     </div>
-    <form action="#" class="mt-8 space-y-6" method="POST">
+    <form @submit.prevent="register" class="mt-8 space-y-6" method="POST">
         <input name="remember" type="hidden" value="true">
         <div class="rounded-md shadow-sm -space-y-px">
             <div>
                 <label class="sr-only" for="full-name">Full name</label>
-                <input id="full-name" autocomplete=""
+                <input id="full-name" v-model="user.name" autocomplete=""
                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                        name="full_name" placeholder="Full name"
                        required
@@ -27,7 +23,7 @@
             </div>
             <div>
                 <label class="sr-only" for="email-address">Email address</label>
-                <input id="email-address" autocomplete="email"
+                <input id="email-address" v-model="user.email" autocomplete="email"
                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                        name="email" placeholder="Email address"
                        required
@@ -35,9 +31,17 @@
             </div>
             <div>
                 <label class="sr-only" for="password">Password</label>
-                <input id="password" autocomplete="current-password"
-                       class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                <input id="password" v-model="user.password" autocomplete=""
+                       class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                        name="password" placeholder="Password"
+                       required
+                       type="password">
+            </div>
+            <div>
+                <label class="sr-only" for="password">Password Confirmation</label>
+                <input id="password_confirmation" v-model="user.password_confirmation" autocomplete=""
+                       class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                       name="password_confirmation" placeholder="Password Confirmation"
                        required
                        type="password">
             </div>
@@ -68,6 +72,31 @@
     </form>
 
 </template>
+
+<script setup>
+import store from "../store";
+import {useRouter} from "vue-router";
+const router = useRouter();
+
+const user = {
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: ''
+}
+
+function register(event) {
+    store.dispatch('register', user)
+        .then((response) => {
+            console.log(response);
+            router.push({'path': '/'})
+        }).catch((error) => {
+            console.log(error);
+        });
+}
+
+</script>
+
 
 <style scoped>
 
