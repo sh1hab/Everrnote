@@ -15,3 +15,5 @@ yarn-error.log
 /.idea
 /.vscode
 /vue/.vscode/
+package.json
+package-lock.json
