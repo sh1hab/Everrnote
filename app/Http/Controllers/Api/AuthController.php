@@ -7,7 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -20,8 +20,6 @@ class AuthController extends BaseApiController
     public function register(RegisterRequest $request)
     {
         try {
-//            DB::beginTransaction();
-
             $user = new User();
             $user->id = (string)Str::orderedUuid();
             $user->name = $request->input('name');
@@ -31,14 +29,12 @@ class AuthController extends BaseApiController
 
             $token = $user->createToken('main')->plainTextToken;
 
-//            DB::commit();
-//
-            dd($user);
-
-            return $this->sendResponse('authToken', $token);
+            return $this->sendResponse([
+                'message' => __("global.register_success"),
+                'token' => $token,
+            ]);
         } catch (Exception $e) {
-//            DB::rollback();
-            return $this->sendError( $e->getMessage(), 500);
+            return $this->sendError((array)$e->getMessage(), 500);
         }
 
     }
@@ -52,10 +48,26 @@ class AuthController extends BaseApiController
         $credentials = $request->only(['email', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
-            return $this->getErrorBag('Invalid', 422, 'Credentials do not match');
+            return $this->sendError((array)'Credentials do not match', 422);
         }
 
-        return $this->sendResponse('authToken', $token);
+        $token = Auth::user()->createToken('main')->plainTextToken;
+
+        return $this->sendResponse([
+            'message' => __("global.login_success"),
+            'user' => Auth::user(),
+            'token' => $token,
+        ]);
     }
 
+    /**
+     * @return JsonResponse
+     */
+    function logout()
+    {
+        // revokes the token that was used to authenticate the current request...
+        Auth::user()->currentAccessToken()->delete();
+
+        return $this->sendResponse([], false, 204);
+    }
 }
