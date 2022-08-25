@@ -29,7 +29,7 @@ abstract class BaseApiController extends BaseController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendResponse($result = [], $wrapped = true)
+    public function sendResponse($result = [], $wrapped = true, $status=200)
     {
         if ($wrapped) {
             $response = (object)[
@@ -56,7 +56,7 @@ abstract class BaseApiController extends BaseController
                 $result
             );
         }
-        return response()->json($response, 200);
+        return response()->json($response, $status);
     }
 
     /**
