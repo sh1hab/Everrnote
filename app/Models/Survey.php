@@ -10,6 +10,13 @@ class Survey extends Model
 {
     use HasFactory;
 
+    const TYPE_TEXT = 'text';
+    const TYPE_TEXTAREA = 'textarea';
+    const TYPE_SELECT = 'select';
+    const TYPE_RADIO = 'radio';
+    const TYPE_CHECKBOX = 'checkbox';
+
+
     /**
      * @var string[]
      */
@@ -21,5 +28,21 @@ class Survey extends Model
     public function upload()
     {
         return $this->hasOne(Upload::class, '_id', 'upload_id');
+    }
+
+    /**
+     * @return HasMany|\Jenssegers\Mongodb\Relations\HasMany
+     */
+    public function questions()
+    {
+        return $this->hasMany(SurveyQuestion::class);
+    }
+
+    /**
+     * @return HasMany|\Jenssegers\Mongodb\Relations\HasMany
+     */
+    public function answers()
+    {
+        return $this->hasMany(SurveyAnswer::class);
     }
 }

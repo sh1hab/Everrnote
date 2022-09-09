@@ -23,7 +23,8 @@ class SurveyResource extends JsonResource
             'user_id' => $this->user_id,
             'description' => $this->description,
             'expire_date' => $this->expire_date,
-            'upload' => new UploadResource($this->whenLoaded('upload'))
+            'upload' => new UploadResource($this->whenLoaded('upload')),
+            'questions' => [],
         ];
     }
 }
