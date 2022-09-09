@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('url')->nullable();
             $table->enum('type', ['image', 'audio', 'video', 'file']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
