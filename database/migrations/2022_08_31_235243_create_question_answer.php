@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('uploads', function (Blueprint $table) {
+        Schema::create('question_answer', function (Blueprint $table) {
             $table->id();
-            $table->string('url')->nullable();
-            $table->enum('type', ['image', 'audio', 'video', 'file']);
+            $table->foreignIdFor(\App\Models\SurveyQuestion::class, 'survey_question_id');
+            $table->foreignIdFor(\App\Models\SurveyAnswer::class, 'survey_answer_id');
+            $table->text('answer');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('uploads');
+        Schema::dropIfExists('question_answer');
     }
 };

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Survey;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,12 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('uploads', function (Blueprint $table) {
+        Schema::create('survey_answers', function (Blueprint $table) {
             $table->id();
-            $table->string('url')->nullable();
-            $table->enum('type', ['image', 'audio', 'video', 'file']);
-            $table->timestamps();
-            $table->softDeletes();
+            $table->foreignIdFor(Survey::class, 'survey_id');
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('uploads');
+        Schema::dropIfExists('survey_answers');
     }
 };
