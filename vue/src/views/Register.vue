@@ -10,7 +10,8 @@
             </router-link>
         </p>
     </div>
-    <form @submit.prevent="register" class="mt-8 space-y-6" method="POST">
+
+    <form class="mt-8 space-y-6" method="POST" @submit.prevent="register">
         <input name="remember" type="hidden" value="true">
         <div class="rounded-md shadow-sm -space-y-px">
             <div>
@@ -75,7 +76,9 @@
 
 <script setup>
 import store from "../store";
+import {ref} from "vue";
 import {useRouter} from "vue-router";
+
 const router = useRouter();
 
 const user = {
@@ -85,13 +88,22 @@ const user = {
     password_confirmation: ''
 }
 
+let errorMsg = ref('');
+
+
 function register(event) {
+    console.log(store);
+
     store.dispatch('register', user)
         .then((response) => {
-            console.log(response);
+            // console.log(response);
             router.push({'path': '/'})
-        }).catch((error) => {
+        })
+        .catch(error => {
+            console.clear();
             console.log(error);
+
+            errorMsg.value = error.response.data.error
         });
 }
 

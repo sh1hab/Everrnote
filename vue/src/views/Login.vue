@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
 
     <div>
@@ -15,12 +11,17 @@
             </router-link>
         </p>
     </div>
-    <form action="#" class="mt-8 space-y-6" method="POST">
+
+    <form class="mt-8 space-y-6" method="POST" @submit.prevent="login">
+
+        <span class="accent-red-500">{{ errorMsg }}</span>
+
         <input name="remember" type="hidden" value="true">
+
         <div class="rounded-md shadow-sm -space-y-px">
             <div>
                 <label class="sr-only" for="email-address">Email address</label>
-                <input id="email-address" autocomplete="email"
+                <input id="email-address" v-model="user.email" autocomplete="email"
                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                        name="email" placeholder="Email address"
                        required
@@ -28,7 +29,7 @@
             </div>
             <div>
                 <label class="sr-only" for="password">Password</label>
-                <input id="password" autocomplete="current-password"
+                <input id="password" v-model="user.password" autocomplete="current-password"
                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                        name="password" placeholder="Password"
                        required
@@ -37,18 +38,13 @@
         </div>
 
         <div class="flex items-center justify-between">
-            <!--                    <div class="flex items-center">-->
-            <!--                        <input id="remember-me"-->
-            <!--                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"-->
-            <!--                               name="remember-me"-->
-            <!--                               type="checkbox">-->
-            <!--                        <label class="ml-2 block text-sm text-gray-900" for="remember-me"> Remember me </label>-->
-            <!--                    </div>-->
-
-            <!--                    <div class="text-sm">-->
-            <!--                        <a class="font-medium text-indigo-600 hover:text-indigo-500" href="#"> Forgot your-->
-            <!--                            password? </a>-->
-            <!--                    </div>-->
+            <div class="flex items-center">
+                <input id="remember-me"
+                       v-model="user.remember"
+                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                       name="remember-me" type="checkbox">
+                <label class="ml-2 block text-sm text-gray-900" for="remember-me"> Remember me </label>
+            </div>
         </div>
 
         <div>
@@ -71,6 +67,37 @@
 
 </template>
 
-<style scoped>
+<script setup>
+import store from "../store";
+import {useRouter} from "vue-router";
+import {ref} from "vue";
 
-</style>
+const router = useRouter();
+
+const user = {
+    email: '',
+    password: '',
+    remember: false
+}
+
+let errorMsg = ref('');
+
+function login() {
+    store.dispatch('login', user)
+        .then(response => {
+            console.clear();
+            console.log(router.getRoutes());
+
+            router.push({
+                name: 'Dashboard'
+            });
+        })
+        // .catch(error => {
+        //     // console.clear();
+        //     console.log(error.response.data.errors);
+        //
+        //     errorMsg.value = error.response.data.errors
+        // });
+}
+
+</script>

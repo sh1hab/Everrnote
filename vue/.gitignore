@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 /.vscode/
 vue/.vscode/
+.env
+.env.production

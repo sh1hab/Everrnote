@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Upload;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->text('details');
-            $table->foreignIdFor(Upload::class);
+            $table->string('email_or_phone')->nullable();
+            $table->string('password')->nullable();
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists('contacts');
     }
 };
