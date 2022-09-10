@@ -1,0 +1,7 @@
+{
+    "root": "vue/dist",
+    "clean_urls": true,
+    "routes": {
+        "/**": "vue/index.html"
+    }
+}
