@@ -21,12 +21,13 @@
                             <div class="ml-10 flex items-baseline space-x-4">
                                 <router-link v-for="item in navigation" :key="item.name"
                                              :class="[item.current ? '' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']"
-                                             :to="item.to.name"
+                                             :to="item.to"
                                              active-class="bg-gray-900 text-white">{{ item.name }}
                                 </router-link>
                             </div>
                         </div>
                     </div>
+
                     <div class="hidden md:block">
                         <div class="ml-4 flex items-center md:ml-6">
                             <!--                            <button-->
@@ -42,7 +43,8 @@
                                     <MenuButton
                                         class="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                                         <span class="sr-only">Open user menu</span>
-                                        <img :alt="user.name" :src="user.imageUrl" class="h-8 w-8 rounded-full"/>
+                                        <img :alt="user.name" :src="(user.upload && user.upload.image_url) || 'https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg'"
+                                             class="h-8 w-8 rounded-full"/>
                                     </MenuButton>
                                 </div>
                                 <transition enter-active-class="transition ease-out duration-100"
@@ -54,10 +56,12 @@
                                     <MenuItems
                                         class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                                            <router-link :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
-                                               :to="item.to.name">{{
+                                            <router-link
+                                                :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
+                                                :to="item.to.name">{{
                                                     item.name
-                                                }}</router-link>
+                                                }}
+                                            </router-link>
                                         </MenuItem>
                                     </MenuItems>
                                 </transition>
@@ -83,14 +87,14 @@
                                  :class="[this.$route.name === item.to.name ? '' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']"
                                  :to="item.to.name"
                                  active-class="bg-gray-900 text-white"
-                                 >{{ item.name }}
+                    >{{ item.name }}
                     </router-link>
                 </div>
 
                 <div class="pt-4 pb-3 border-t border-gray-700">
                     <div class="flex items-center px-5">
                         <div class="flex-shrink-0">
-                            <img :src="user.imageUrl" alt="{{ user.name }}" class="h-10 w-10 rounded-full"/>
+                            <img :src="(user.upload && user.upload.image_url) || 'https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg'" alt="{{ user.name }}" class="h-10 w-10 rounded-full"/>
                         </div>
                         <div class="ml-3">
                             <div class="text-base font-medium leading-none text-white">{{ user.name }}</div>
@@ -113,7 +117,10 @@
             </DisclosurePanel>
         </Disclosure>
 
+
         <router-view></router-view>
+
+        <Notification/>
     </div>
 </template>
 
@@ -123,6 +130,7 @@ import {BellIcon, MenuIcon, XIcon} from '@heroicons/vue/outline'
 import {useStore} from "vuex";
 import {computed} from "vue";
 import {useRouter} from "vue-router";
+import Notification from "../Notification.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -131,11 +139,15 @@ const user = computed(() => {
     return store.state.user.data
 });
 
+store.dispatch("getUser");
+
 // const user = store.state.user.data;
 
 const navigation = [
     {name: 'Dashboard', to: {name: 'Dashboard'}},
-    {name: 'surveys', to: {name: "Surveys"}},
+    {name: 'Notes', to: {name: 'Notes'}},
+    {name: 'Contacts', to: {name: 'Contacts'}},
+    {name: 'Surveys', to: {name: "Surveys"}},
 ]
 
 const userNavigation = [

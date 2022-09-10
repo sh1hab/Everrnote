@@ -8,6 +8,7 @@ use App\Http\Resources\SurveyResource;
 use App\Models\Survey;
 use App\Models\Upload;
 use App\Traits\ImageTrait;
+use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -33,7 +34,7 @@ class SurveyController extends BaseApiController
     {
         return SurveyResource::collection(Survey::with(['upload'])
             ->where('user_id', $this->user->id)
-            ->paginate());
+            ->paginate(5));
     }
 
     /**
@@ -41,22 +42,23 @@ class SurveyController extends BaseApiController
      *
      * @param StoreSurveyRequest $request
      * @return SurveyResource
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(StoreSurveyRequest $request)
     {
         $data = $request->validated();
 
-        if (isset($data['image'])){
+        if (isset($data['image']) ){
             $data['image'] = ImageTrait::saveImage($data['image']);
 
             $upload = Upload::create([
                'url' => $data['image'],
                 'type' => 'image'
             ]);
+
+            $data['upload_id'] = $upload->id;
         }
 
-        $data['upload_id'] = $upload->id;
         $survey = Survey::create($data);
 
         $survey->load('upload');
@@ -87,7 +89,7 @@ class SurveyController extends BaseApiController
      * @param UpdateSurveyRequest $request
      * @param Survey $survey
      * @return SurveyResource
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(UpdateSurveyRequest $request, Survey $survey)
     {

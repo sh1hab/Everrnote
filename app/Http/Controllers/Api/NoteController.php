@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Models\Note;
-use  App\Http\Controllers\Api\BaseApiController;
+use Illuminate\Http\Request;
 
 class NoteController extends BaseApiController
 {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Upload;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,12 +15,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('surveys', function (Blueprint $table) {
             $table->id();
-            $table->text('details');
-            $table->foreignIdFor(Upload::class);
+            $table->foreignIdFor(User::class, 'user_id');
+            $table->foreignIdFor(Upload::class, 'upload_id');
+            $table->string('title', 1000);
+            $table->string('slug', 1000);
+            $table->tinyInteger('status');
+            $table->text('description')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+            $table->timestamp('expire_date')->nullable();
         });
     }
 
@@ -30,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists('surveys');
     }
 };

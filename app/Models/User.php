@@ -2,22 +2,21 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-//use Illuminate\Foundation\Auth\User as Authenticatable;
-use Jenssegers\Mongodb\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable Implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
+class User extends Authenticatable implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-
-    protected $collection = 'users';
+//    protected $connection = 'mongodb';
+//    protected $collection = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -48,4 +47,12 @@ class User extends Authenticatable Implements AuthenticatableContract, Authoriza
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne|\Jenssegers\Mongodb\Relations\HasOne
+     */
+    public function upload()
+    {
+        return $this->hasOne(Upload::class, '_id', 'upload_id');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\AuthResource;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -57,6 +58,19 @@ class AuthController extends BaseApiController
             'message' => __("global.login_success"),
             'user' => Auth::user(),
             'token' => $token,
+        ]);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function user(): JsonResponse
+    {
+        $user = Auth::user()->load(['upload']);
+
+        return $this->sendResponse([
+            'message' => __("global.success"),
+            'user' => new AuthResource($user),
         ]);
     }
 

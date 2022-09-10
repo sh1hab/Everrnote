@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\NoteController;
+use App\Http\Controllers\Api\ContactsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/notes', [NoteController::class, 'index']);
-Route::post('/notes', [NoteController::class, 'store']);
+Route::middleware('auth:sanctum')->group( function ($router) {
+    $router->get('/contacts', [ContactsController::class, 'index']);
+});
+
+
 
