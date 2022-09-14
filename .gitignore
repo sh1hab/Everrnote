@@ -18,3 +18,4 @@ yarn-error.log
 package.json
 package-lock.json
 !Procfile
+/vue/node_modules/
