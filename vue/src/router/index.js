@@ -9,7 +9,7 @@ import AuthLayout from "../components/Layouts/AuthLayout.vue";
 import DefaultLayout from "../components/Layouts/DefaultLayout.vue";
 import SurveyView from "../views/Survey/SurveyView.vue";
 import Surveys from "../views/Survey/Surveys.vue";
-
+import NotFound from "../views/NotFound.vue"
 
 const routes = [
     {
@@ -64,6 +64,11 @@ const routes = [
         meta: {requiresAuth: true},
 
     },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: NotFound
+    }
 
 ];
 
