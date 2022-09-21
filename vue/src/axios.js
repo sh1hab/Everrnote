@@ -1,5 +1,6 @@
 import axios from "axios";
 import store from "./store";
+import router from "./router/index.js";
 
 const axiosClient = axios.create({
     baseURL: `${import.meta.env.VITE_API_BASE_URL}/api/v1`
@@ -11,19 +12,18 @@ axiosClient.interceptors.request.use(config => {
     return config;
 });
 
-// add response interceptor
-axiosClient.interceptors.response.use((response) => {
-    if(response.status === 401) {
-        alert("You are not authorized");
-    }
+
+axiosClient.interceptors.response.use(response => {
     return response;
-}, (error) => {
-    if (error.response && error.response.data) {
-        return Promise.reject(error.response.data);
+}, error => {
+    if (error.response.status === 401) {
+        sessionStorage.removeItem('TOKEN')
+        router.push({name: 'Login'})
+    } else if (error.response.status === 404) {
+        router.push({name: 'NotFound'})
     }
-    return Promise.reject(error.message);
-});
-
-
+    // console.log('here');
+    throw error;
+})
 
 export default axiosClient;

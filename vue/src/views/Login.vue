@@ -12,10 +12,35 @@
         </p>
     </div>
 
+    <div class="">
+        <Alert v-if="errorMsg.length">
+            {{ errorMsg[0] }}
+
+            <span
+                class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-[rgba(0,0,0,0.2)]"
+                @click="errorMsg = []"
+            >
+<!--                icon-->
+                <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                      d="M6 18L18 6M6 6l12 12"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                  />
+                </svg>
+            </span>
+        </Alert>
+    </div>
+
+    <!--    login form -->
     <form class="mt-8 space-y-6" method="POST" @submit.prevent="login">
-
-        <span class="accent-red-500">{{ errorMsg }}</span>
-
         <input name="remember" type="hidden" value="true">
 
         <div class="rounded-md shadow-sm -space-y-px">
@@ -49,6 +74,7 @@
 
         <div>
             <button
+                :disabled="loading"
                 class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 type="submit">
             <span class="absolute left-0 inset-y-0 flex items-center pl-3">
@@ -60,10 +86,19 @@
                       fill-rule="evenodd"/>
               </svg>
             </span>
-                Login
+                <!-- loading spinner  -->
+                <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                     fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          fill="currentColor"></path>
+                </svg>
+
+                Sign in
             </button>
         </div>
     </form>
+    <!--    login form-->
 
 </template>
 
@@ -71,6 +106,7 @@
 import store from "../store";
 import {useRouter} from "vue-router";
 import {ref} from "vue";
+import Alert from "../components/Alert.vue";
 
 const router = useRouter();
 
@@ -80,24 +116,24 @@ const user = {
     remember: false
 }
 
-let errorMsg = ref('');
+const loading = ref(false);
+
+let errorMsg = ref([]);
 
 function login() {
+    loading.value = true;
     store.dispatch('login', user)
-        .then(response => {
-            console.clear();
-            console.log(router.getRoutes());
-
+        .then(() => {
             router.push({
                 name: 'Dashboard'
             });
         })
-        // .catch(error => {
-        //     // console.clear();
-        //     console.log(error.response.data.errors);
-        //
-        //     errorMsg.value = error.response.data.errors
-        // });
+        .catch((error) => {
+            errorMsg.value = error.response.data.errors
+        })
+        .finally(() => {
+            loading.value = false;
+        });
 }
 
 </script>
