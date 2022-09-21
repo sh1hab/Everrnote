@@ -27,8 +27,8 @@
         </template>
 
         <div v-if="surveys.loading" class="flex justify-center">Loading...</div>
-        <div v-else>
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+        <div>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3" :class="[surveys.loading ? 'animate-pulse': '']">
                 <SurveyListItem v-for="(survey,index) in surveys.data"
                                 :key="survey.id"
                                 :style="{animationDelay: `${index * 0.1}s`}"
@@ -37,8 +37,8 @@
                                 @delete="deleteSurvey"
                 />
             </div>
-            
-            <div v-if="surveys.meta.total" class="flex justify-center mt-5">
+
+            <div v-if="surveys.meta && surveys.meta.total" class="flex justify-center mt-5">
                 <nav class="inline-flex justify-center rounded-md shadow-sm">
                     <a v-for="(link, index) of surveys.links"
                        :key="index"
