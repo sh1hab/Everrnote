@@ -13,5 +13,5 @@ class Note extends Model
 
     protected $collection = 'notes';
 
-    protected $guarded = [];
+    protected $fillable = ['title', 'description'];
 }
