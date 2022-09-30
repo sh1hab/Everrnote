@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\StoreContactRequest;
 use App\Http\Resources\ContactResource;
 use App\Http\Resources\SurveyResource;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class ContactController extends BaseApiController
 {
@@ -19,15 +21,21 @@ class ContactController extends BaseApiController
      */
     public function index(Request $request)
     {
-        return ContactResource::collection(Contact::orderBy('uuid', 'desc')->paginate($request->paginate ?? 20));
+        $contacts = Auth::user()->contacts()->orderBy('uuid', 'desc')->paginate($request->paginate ?? 20);
+
+
+        return ContactResource::collection($contacts);
     }
 
     /**
+     * @param StoreContactRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
-        $contact = new Contact();
+        $data = $request->validated();
+
+        $contact = Contact::create($data);
 
         return $this->sendResponse(new ContactResource($contact));
     }
@@ -40,15 +48,18 @@ class ContactController extends BaseApiController
      */
     public function show(Contact $contact)
     {
-
-        return $this->sendResponse(new SurveyResource($contact));
+        return $this->sendResponse(new ContactResource($contact));
     }
 
     /**
      * @return JsonResponse
      */
-    public function update(Contact $contact)
+    public function update(Request $request, Contact $contact)
     {
+        $data = $request->input();
+
+        $contact->update($data);
+
         return $this->sendResponse(new ContactResource($contact));
     }
 
