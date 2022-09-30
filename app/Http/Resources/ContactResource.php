@@ -16,9 +16,15 @@ class ContactResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'email_or_phone' => $this->email_or_phone,
+            'name' => $this->name,
+            'email' => $this->email,
             'password' => $this->password,
-            'status' => $this->status
+            'is_password_active' => $this->is_password_active,
+            'nationality' => $this->nationality,
+            'address' => $this->address,
+            'characteristics' => $this->characteristics,
+            'starred' => $this->starred,
+            'user' => new UserResource($this->user)
         ];
     }
 }
