@@ -212,4 +212,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    // default admin email
+    'admin_email' => env('ADMIN_EMAIL')
+
 ];
