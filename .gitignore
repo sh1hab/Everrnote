@@ -19,3 +19,5 @@ package.json
 package-lock.json
 !Procfile
 /vue/node_modules/
+/_ide_helper.php
+/_ide_helper_models.php
