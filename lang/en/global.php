@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'login_success' => 'Successfully logged in',
     'success' => 'Success :)',
     'email_verified' => 'Your email verified successfully.',
     'invalid_current_password' => 'Invalid current password.',
