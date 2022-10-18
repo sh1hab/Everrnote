@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Resources\ContactResource;
-use App\Http\Resources\SurveyResource;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class ContactController extends BaseApiController
 {
@@ -18,13 +20,26 @@ class ContactController extends BaseApiController
      *
      * @param Request $request
      * @return AnonymousResourceCollection
+     * @throws InvalidArgumentException
      */
     public function index(Request $request)
     {
-        $contacts = Auth::user()->contacts()->orderBy('uuid', 'desc')->paginate($request->paginate ?? 20);
+        $cached_contacts = Cache::get('contacts_'.Auth::id());
 
+        if (empty($cached_contacts)){
+            $cached_contacts = Auth::user()->contacts()->orderBy('uuid', 'desc')->get();
 
-        return ContactResource::collection($contacts);
+            Cache::set('contacts_'.Auth::id(), $cached_contacts, 1000);
+        }
+
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page', 1);
+
+        $data = new LengthAwarePaginator(
+            $cached_contacts->forPage($page, $perPage), $cached_contacts->count(), $perPage, $page
+        );
+
+        return ContactResource::collection($data);
     }
 
     /**
