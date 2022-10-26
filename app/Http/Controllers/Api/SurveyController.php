@@ -105,10 +105,9 @@ class SurveyController extends BaseApiController
             $survey->upload->update([
                 'url' => $data['image']
             ]);
-
         }
 
-        $survey->update($request->validated());
+        $survey->update($data);
 
         $survey->load('upload');
 

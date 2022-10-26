@@ -1,9 +1,9 @@
 <template>
-    <PageComponent title=""></PageComponent>
-
+    <PageComponent title="Dashboard"></PageComponent>
 
 </template>
 
 
 <script setup>
-import PageComponent from "../components/PageComponent.vue";</script>
+import PageComponent from "../components/PageComponent.vue";
+</script>

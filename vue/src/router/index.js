@@ -1,15 +1,19 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
-import Notes from "../views/Notes.vue";
+import Accounts from "../views/Account/Accounts.vue";
+import AccountView from "../views/Account/AccountView.vue";
+import Notes from "../views/Note/Notes.vue";
+import NotesView from "../views/Note/NotesView.vue";
 import Login from "../views/Login.vue";
-import Contacts from "../views/Contacts.vue";
+import Contacts from "../views/Contact/Contacts.vue";
+import ContactView from "../views/Contact/ContactView.vue";
 import Register from "../views/Register.vue";
-import store from "../store/index.js";
 import AuthLayout from "../components/Layouts/AuthLayout.vue";
 import DefaultLayout from "../components/Layouts/DefaultLayout.vue";
 import SurveyView from "../views/Survey/SurveyView.vue";
 import Surveys from "../views/Survey/Surveys.vue";
-import NotFound from "../views/NotFound.vue"
+import NotFound from "../views/NotFound.vue";
+import store from "../store/index.js";
 
 const routes = [
     {
@@ -22,10 +26,31 @@ const routes = [
                 path: '/dashboard', name: 'Dashboard', component: Dashboard,
             },
             {
-                path: '/notes', name: 'Notes', component: Notes
+                path: '/accounts', name: 'Accounts', component: Accounts
+            },
+            {
+                path: '/accounts/create', name: 'AccountCreate', component: AccountView
+            },
+            {
+                path: '/accounts/:id', name: 'AccountView', component: AccountView,
+            },
+            {
+                path: '/notes', name: 'Notes', component: Notes, children: []
+            },
+            {
+                path: '/notes/create', name: 'NoteCreate', component: NotesView
+            },
+            {
+                path: '/notes/:id', name: 'NotesView', component: NotesView
             },
             {
                 path: '/contacts', name: 'Contacts', component: Contacts
+            },
+            {
+                path: '/contacts/create', name: 'ContactCreate', component: ContactView
+            },
+            {
+                path: '/contacts/:id', name: 'ContactView', component: ContactView,
             },
             {
                 path: '/surveys', name: 'Surveys', component: Surveys,
@@ -36,6 +61,7 @@ const routes = [
             {
                 path: '/surveys/:id', name: 'SurveyView', component: SurveyView,
             },
+
         ],
         meta: {requiresAuth: true}
     },
@@ -81,8 +107,6 @@ router.beforeEach((to, from, next) => {
     if (!store.state.user.token && to.meta.requiresAuth) {
         next({name: 'Login'});
     } else if (store.state.user.token && to.meta.isGuest) {
-        // console.clear();
-        // console.log(store.state.user.token);
         next({path: 'Dashboard', 'message': 'You are already logged in'});
     } else {
         next();

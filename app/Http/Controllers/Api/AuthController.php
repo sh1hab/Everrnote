@@ -66,7 +66,7 @@ class AuthController extends BaseApiController
      */
     public function user(): JsonResponse
     {
-        $user = Auth::user()->load(['upload']);
+        $user = Auth::user()->load(['uploads']);
 
         return $this->sendResponse([
             'message' => __("global.success"),

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Contact;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
@@ -29,7 +30,13 @@ class ImportContacts extends Command
      */
     public function handle()
     {
+        $user = User::where('email', config('app.admin_email'))->first();
+
         $data = json_decode(Storage::get('imports/contacts.json'), true);
+
+        foreach ($data as &$dt){
+            $dt['user_id'] = $user->id;
+        }
 
         Contact::insert($data);
 

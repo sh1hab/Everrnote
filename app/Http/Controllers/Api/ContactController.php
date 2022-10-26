@@ -33,7 +33,8 @@ class ContactController extends BaseApiController
         }
 
         $page = $request->input('page', 1);
-        $perPage = $request->input('per_page', 1);
+
+        $perPage = $request->input('per_page', 10);
 
         $data = new LengthAwarePaginator(
             $cached_contacts->forPage($page, $perPage), $cached_contacts->count(), $perPage, $page

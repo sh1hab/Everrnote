@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\NoteResource;
+use App\Http\Resources\TransactionResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Note;
@@ -37,6 +37,18 @@ class NoteController extends BaseApiController
      */
     public function show(Note $note)
     {
-        return $this->sendResponse(new NoteResource($note));
+        return $this->sendResponse(new TransactionResource($note));
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function update(Request $request, Note $note)
+    {
+        $data = $request->input();
+
+        $note->update($data);
+
+        return $this->sendResponse(new TransactionResource($note));
     }
 }
