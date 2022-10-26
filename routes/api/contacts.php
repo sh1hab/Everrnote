@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group( function ($router) {
-    $router->resource('/contacts', ContactController::class);
+    $router->resource('/contacts', TransactionController::class);
 });
 
 

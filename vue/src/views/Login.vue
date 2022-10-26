@@ -48,7 +48,7 @@
                 <label class="sr-only" for="email-address">Email address</label>
                 <input id="email-address" v-model="user.email" autocomplete="email"
                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                       name="email" placeholder="Email address"
+                       name="email" placeholder="admin@email.com"
                        required
                        type="email">
             </div>
@@ -56,7 +56,7 @@
                 <label class="sr-only" for="password">Password</label>
                 <input id="password" v-model="user.password" autocomplete="current-password"
                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                       name="password" placeholder="Password"
+                       name="password" placeholder="12345678"
                        required
                        type="password">
             </div>
@@ -111,8 +111,8 @@ import Alert from "../components/Alert.vue";
 const router = useRouter();
 
 const user = {
-    email: '',
-    password: '',
+    email: 'admin@email.com',
+    password: '12345678',
     remember: false
 }
 
@@ -129,7 +129,11 @@ function login() {
             });
         })
         .catch((error) => {
-            errorMsg.value = error.response.data.errors
+            if (error.response.status === 500){
+                errorMsg.value = ["Server Error"];
+            }else {
+                errorMsg.value = error.response.data.errors;
+            }
         })
         .finally(() => {
             loading.value = false;

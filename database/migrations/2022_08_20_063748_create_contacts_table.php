@@ -15,9 +15,15 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('email_or_phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->text('address')->default('');
             $table->string('password')->nullable();
-            $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('is_password_active')->default(0);
+            $table->string('work_or_education_institute')->nullable();
+            $table->string('nationality')->nullable();
+            $table->string('characteristics')->nullable();
+            $table->tinyInteger('starred')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,108 +1,10 @@
 import {createStore} from "vuex";
 import axiosClient from "../axios.js";
 
-// const tmpSurveys = [
-//     {
-//         id: 1,
-//         title: 'thecodeholic Youtube channel content',
-//         slug: '',
-//         status: 'draft',
-//         image: 'https://media.istockphoto.com/photos/mountain-landscape-picture-id517188688?k=20&m=517188688&s=612x612&w=0&h=i38qBm2P-6V4vZVEaMy_TaTEaoCMkYhvLCysE7yJQ5Q=',
-//         upload: {},
-//         description: `My name is hashi,  <br>i like to drink o cha, lets start ni, ichi, san, yon, go, roku`,
-//         questions: [{
-//             id: 1,
-//             type: 'select',
-//             question: '',
-//             description: '',
-//             data: {
-//                 options: [
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "GERMANY"}
-
-//                 ]
-//             }
-//         }],
-//     },
-//     {
-//         id: 2,
-//         title: 'Survey 2',
-//         image: "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014__340.jpg",
-//         slug: '',
-//         status: 'active',
-//         upload: {},
-//         description: ' hi there',
-//         questions: [{
-//             id: 1,
-//             type: 'select',
-//             question: '',
-//             description: '',
-//             data: {
-//                 options: [
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "GERMANY"}
-
-//                 ]
-//             }
-//         }],
-//     },
-//     {
-//         id: 3,
-//         title: 'Survey 3',
-//         slug: '',
-//         status: 'active',
-//         image: "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014__340.jpg",
-//         upload: {},
-//         description: 'do want to take survey',
-//         questions: [{
-//             id: 1,
-//             type: 'select',
-//             question: '',
-//             description: '',
-//             data: {
-//                 options: [
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "GERMANY"}
-
-//                 ]
-//             }
-//         }],
-//     },
-//     {
-//         id: 2,
-//         title: 'Survey 2',
-//         image: "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014__340.jpg",
-//         slug: '',
-//         status: 'active',
-//         upload: {},
-//         description: ' hi there',
-//         questions: [{
-//             id: 1,
-//             type: 'select',
-//             question: '',
-//             description: '',
-//             data: {
-//                 options: [
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "USA"},
-//                     {uuid: "f35454512121-1ddfd-ddsd-dfd-sdfddffd", text: "GERMANY"}
-
-//                 ]
-//             }
-//         }],
-//     },
-// ];
-
 const store = createStore({
     state: {
         loading: false,
+        currentContact: {},
         contacts: {
             data: [],
             links: [],
@@ -117,8 +19,19 @@ const store = createStore({
             show: false,
             type: ''
         },
+        currentNote: {
+            data: {}
+        },
+        notes: {
+            data: {}
+        },
         questionTypes: ["text", "select", "radio", "checkbox", "textarea"],
         surveys: {
+            data: [],
+            loading: false,
+            links: [],
+        },
+        accounts: {
             data: [],
             loading: false,
             links: [],
@@ -131,15 +44,29 @@ const store = createStore({
     getters: {},
     actions: {
         deleteSurvey({commit}, id) {
-            axiosClient.delete('/surveys/' + id)
+            return axiosClient.delete('/surveys/' + id)
                 .then(response => {
                     // commit('setSurveys', response.data.contacts);
                     return response
                 });
         },
-        fetchContacts({commit}) {
+        deleteNote({commit}, id) {
+            return axiosClient.delete('/notes/' + id)
+                .then(response => {
+                    return response
+                })
+        },
+        deleteContact({commit}, id) {
+            return axiosClient.delete('/contacts/' + id)
+                .then(response => {
+                    return response
+                })
+        },
+        getContacts({commit}, {url = ''} = {}) {
             commit('setLoading', true);
-            axiosClient.get('/contacts')
+            url = '/contacts'+url;
+
+            return axiosClient.get(url)
                 .then(response => {
                     commit('setContacts', response);
                     commit('setLoading', false);
@@ -148,7 +75,7 @@ const store = createStore({
         },
         getSurvey({commit}, id) {
             commit('setCurrentSurveyLoading', true);
-            axiosClient.get(`/surveys/${id}`)
+            return axiosClient.get(`/surveys/${id}`)
                 .then(response => {
                     commit('setCurrentSurvey', response.data.data);
                     return response
@@ -160,11 +87,10 @@ const store = createStore({
                     commit('setCurrentSurveyLoading', false);
                 });
         },
-        getSurveys({commit}, {url = null} = {} ) {
-            console.log(url);
+        getSurveys({commit}, {url = null} = {}) {
             url = url || '/surveys';
             commit('setSurveysLoading', true);
-            axiosClient.get(url)
+            return axiosClient.get(url)
                 .then(response => {
                     commit('setSurveys', response.data);
                     return response
@@ -176,23 +102,52 @@ const store = createStore({
                     commit('setSurveysLoading', false);
                 });
         },
+        getNote({commit}, id) {
+            commit('setLoading', true);
+            return axiosClient.get(`/notes/${id}`)
+                .then(response => {
+                    commit('setCurrentNote', response.data);
+                    return response
+                })
+                .catch((err) => {
+                    throw  err;
+                })
+                .finally(() => {
+                    commit('setLoading', false);
+                });
+        },
+        getNotes({commit}, {url = null} = {}) {
+            url = url || '/notes';
+            // commit('setSurveysLoading', true);
+            return axiosClient.get(url)
+                .then(response => {
+                    commit('setNotes', response.data);
+                    return response
+                })
+                .catch((err) => {
+                    throw  err;
+                })
+                .finally(() => {
+                    // commit('setSurveysLoading', false);
+                });
+        },
         login({commit}, user) {
-            axiosClient.post('/auth/login', user)
+            return axiosClient.post('/auth/login', user)
                 .then(response => {
                     commit('setUser', response.data.data.user);
                     commit('setToken', response.data.data.token);
                     return response
-                });
+                })
         },
         logout({commit}) {
-            axiosClient.post('/auth/logout')
+            return axiosClient.post('/auth/logout')
                 .then(response => {
                     commit('logout');
                     return response
                 });
         },
         register({commit}, user) {
-            axiosClient.post('/auth/register', user)
+            return axiosClient.post('/auth/register', user)
                 .then(response => {
                     commit('setUser', response.data.data.user);
                     commit('setToken', response.data.data.token);
@@ -204,7 +159,6 @@ const store = createStore({
             if (survey.id) {
                 response = axiosClient.put(`/surveys/${survey.id}`, survey)
                     .then(response => {
-
                         // commit('updateSurvey', response.data.data.survey);
                         return response;
                     })
@@ -218,10 +172,56 @@ const store = createStore({
 
             return response
         },
+        getContact({commit}, id) {
+            return axiosClient.get('/contacts/' + id)
+                .then(response => {
+                    commit('setCurrentContact', response.data);
+                    return response
+                })
+        },
+        saveContact({commit}, contact) {
+            let response;
+            if (contact.id) {
+                response = axiosClient.put(`/contacts/${contact.id}`, contact)
+                    .then(response => {
+                        return response;
+                    })
+            } else {
+                response = axiosClient.post('/contacts', contact)
+                    .then(response => {
+                        return response;
+                    })
+            }
+
+            return response
+        },
+        saveNote({commit}, note) {
+            let response;
+            if (note.id) {
+                response = axiosClient.put(`/notes/${note.id}`, note)
+                    .then(response => {
+                        return response
+                    })
+            } else {
+                response = axiosClient.post(`/notes`, note)
+                    .then(response => {
+                        return response
+                    })
+            }
+
+            return response
+        },
         getUser({commit}) {
             axiosClient.get('auth/user')
                 .then(response => {
                     commit('setUser', response.data.data.user);
+                    return response;
+                })
+        },
+        getAccounts({commit}){
+            axiosClient.get('/accounts')
+                .then(response => {
+                    commit('setAccounts', response.data.data.accounts);
                     return response;
                 })
         }
@@ -241,10 +241,21 @@ const store = createStore({
             state.user.token = token;
             sessionStorage.setItem('TOKEN', token);
         },
+        setCurrentContact(state, contact) {
+            state.currentContact = contact;
+        },
         setContacts(state, contacts) {
             state.contacts.data = contacts.data;
             state.contacts.meta = contacts.meta;
             state.contacts.links = contacts.links;
+        },
+        setCurrentNote(state, note) {
+            state.currentNote.data = note.data;
+        },
+        setNotes(state, notes) {
+            state.notes.data = notes.data;
+            state.notes.meta = notes.meta;
+            state.notes.links = notes.links;
         },
         saveSurvey(state, survey) {
             state.surveys.data = [...state.surveys.data, survey];
@@ -262,7 +273,6 @@ const store = createStore({
             state.surveys.links = surveys.meta.links;
             state.surveys.data = surveys.data;
             state.surveys.meta = surveys.meta;
-
         },
         updateSurvey(state, survey) {
             state.surveys.data = state.surveys.map(survy => {
@@ -272,13 +282,18 @@ const store = createStore({
                 return survy
             })
         },
-        notify: (state, {message, type})=>{
+        notify: (state, {message, type}) => {
             state.notification.show = true;
             state.notification.message = message;
             state.notification.type = type;
-            setTimeout(()=>{
+            setTimeout(() => {
                 state.notification.show = false
             }, 5000)
+        },
+        setAccounts(state, accounts){
+            state.accounts.meta = accounts.meta;
+            state.accounts.links = accounts.meta.links;
+            state.accounts.data = accounts.data;
         }
     },
     modules: {}

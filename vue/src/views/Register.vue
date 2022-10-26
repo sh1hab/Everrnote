@@ -11,6 +11,17 @@
         </p>
     </div>
 
+    <Alert
+        v-if="Object.keys(errors).length"
+        class="flex-col items-stretch text-sm"
+    >
+        <div v-for="(field, index) of Object.keys(errors)" :key="index">
+            <div v-for="(error, ind) of errors[field] || []" :key="ind">
+                * {{ error }}
+            </div>
+        </div>
+    </Alert>
+
     <form class="mt-8 space-y-6" method="POST" @submit.prevent="register">
         <input name="remember" type="hidden" value="true">
         <div class="rounded-md shadow-sm -space-y-px">
@@ -78,6 +89,7 @@
 import store from "../store";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
+import Alert from "../components/Alert.vue"
 
 const router = useRouter();
 
@@ -88,22 +100,19 @@ const user = {
     password_confirmation: ''
 }
 
-let errorMsg = ref('');
-
+let errors = ref({});
 
 function register() {
-    console.log(store);
-
     store.dispatch('register', user)
         .then((response) => {
             // console.log(response);
             router.push({'path': '/'})
         })
         .catch(error => {
-            console.clear();
-            console.log(error);
-
-            errorMsg.value = error.response.data.error
+            // console.clear();
+            // console.log('line 108');
+            // console.log(error);
+            errors.value = error.response.data.errors;
         });
 }
 

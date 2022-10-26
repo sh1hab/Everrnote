@@ -49,10 +49,18 @@ class User extends Authenticatable implements AuthenticatableContract, Authoriza
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne|\Jenssegers\Mongodb\Relations\HasOne
+     * Get all the user's contacts.
      */
-    public function upload()
+    public function contacts()
     {
-        return $this->hasOne(Upload::class, '_id', 'upload_id');
+        return $this->hasMany(Contact::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get all the user's uploads.
+     */
+    public function uploads()
+    {
+        return $this->morphMany(Upload::class, 'uplodable');
     }
 }
