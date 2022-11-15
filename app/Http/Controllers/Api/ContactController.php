@@ -26,8 +26,8 @@ class ContactController extends BaseApiController
     {
         $cached_contacts = Cache::get('contacts_'.Auth::id());
 
-        if (empty($cached_contacts)){
-            $cached_contacts = Auth::user()->contacts()->orderBy('uuid', 'desc')->get();
+        if (is_null($cached_contacts) || count($cached_contacts) == 0){
+            $cached_contacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
 
             Cache::set('contacts_'.Auth::id(), $cached_contacts, 1000);
         }
@@ -46,12 +46,17 @@ class ContactController extends BaseApiController
     /**
      * @param StoreContactRequest $request
      * @return JsonResponse
+     * @throws InvalidArgumentException
      */
     public function store(StoreContactRequest $request)
     {
         $data = $request->validated();
 
         $contact = Contact::create($data);
+
+        $cached_contacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
+
+        Cache::set('contacts_'.Auth::id(), $cached_contacts, 1000);
 
         return $this->sendResponse(new ContactResource($contact));
     }
@@ -69,6 +74,7 @@ class ContactController extends BaseApiController
 
     /**
      * @return JsonResponse
+     * @throws InvalidArgumentException
      */
     public function update(Request $request, Contact $contact)
     {
@@ -76,16 +82,25 @@ class ContactController extends BaseApiController
 
         $contact->update($data);
 
+        $cached_contacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
+
+        Cache::set('contacts_'.Auth::id(), $cached_contacts, 1000);
+
         return $this->sendResponse(new ContactResource($contact));
     }
 
     /**
      * Remove the specified resource from storage.
      * @return JsonResponse
+     * @throws InvalidArgumentException
      */
     public function destroy(Contact $contact)
     {
         $contact->delete();
+
+        $cached_contacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
+
+        Cache::set('contacts_'.Auth::id(), $cached_contacts, 1000);
 
         return $this->sendResponse();
     }
