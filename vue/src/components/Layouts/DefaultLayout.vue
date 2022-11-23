@@ -154,7 +154,7 @@ const navigation = [
     {name: 'Contacts', to: {name: 'Contacts'}},
     {name: 'Notes', to: {name: 'Notes'}},
     // {name: 'Journal', to: {name: 'Journal'}},
-    // {name: 'MoneyManager', to: {name: 'MoneyManager'}},
+    {name: 'MoneyManager', to: {name: 'Transactions'}},
     {name: 'Surveys', to: {name: "Surveys"}},
 ]
 
