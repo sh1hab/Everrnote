@@ -19,7 +19,7 @@ return new class extends Migration
             $table->float('balance');
             $table->string('currency');
             $table->text('notes');
-            $table->string('type');
+            $table->string('type')->comment('debit or credit');
             $table->timestamps();
             $table->softDeletes();
         });
