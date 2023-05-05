@@ -24,12 +24,12 @@ class ContactController extends BaseApiController
      */
     public function index(Request $request)
     {
-        $cached_contacts = Cache::get('contacts_'.Auth::id());
+        $cachedContacts = Cache::get('contacts_'.Auth::id());
 
-        if (is_null($cached_contacts) || count($cached_contacts) == 0){
-            $cached_contacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
+        if (is_null($cachedContacts) || count($cachedContacts) == 0) {
+            $cachedContacts = Auth::user()->contacts()->orderBy('name', $request->input('orderByTime', 'asc'))->get();
 
-            Cache::set('contacts_'.Auth::id(), $cached_contacts, 1000);
+            Cache::set('contacts_'.Auth::id(), $cachedContacts, 1000);
         }
 
         $page = $request->input('page', 1);
@@ -37,7 +37,7 @@ class ContactController extends BaseApiController
         $perPage = $request->input('per_page', 10);
 
         $data = new LengthAwarePaginator(
-            $cached_contacts->forPage($page, $perPage), $cached_contacts->count(), $perPage, $page
+            $cachedContacts->forPage($page, $perPage), $cachedContacts->count(), $perPage, $page
         );
 
         return ContactResource::collection($data);
@@ -54,9 +54,9 @@ class ContactController extends BaseApiController
 
         $contact = Contact::create($data);
 
-        $cached_contacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
+        $cachedContacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
 
-        Cache::set('contacts_'.Auth::id(), $cached_contacts, 1000);
+        Cache::set('contacts_'.Auth::id(), $cachedContacts, 1000);
 
         return $this->sendResponse(new ContactResource($contact));
     }
@@ -82,9 +82,9 @@ class ContactController extends BaseApiController
 
         $contact->update($data);
 
-        $cached_contacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
+        $cachedContacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
 
-        Cache::set('contacts_'.Auth::id(), $cached_contacts, 1000);
+        Cache::set('contacts_'.Auth::id(), $cachedContacts, 1000);
 
         return $this->sendResponse(new ContactResource($contact));
     }
@@ -98,9 +98,9 @@ class ContactController extends BaseApiController
     {
         $contact->delete();
 
-        $cached_contacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
+        $cachedContacts = Auth::user()->contacts()->orderBy('created_at', 'desc')->get();
 
-        Cache::set('contacts_'.Auth::id(), $cached_contacts, 1000);
+        Cache::set('contacts_'.Auth::id(), $cachedContacts, 1000);
 
         return $this->sendResponse();
     }
