@@ -44,7 +44,7 @@
                         <tbody>
                             <tr v-for="(transaction, index) in transactions.data" :key="transaction.id" class="bg-white border-b  dark:border-gray-700">
                                 <td class="p-3"><router-link :to="{ name: 'TransactionView', params: {id: transaction.id}}"  class="font-bold text-blue-500 hover:underline">{{ index + 1 }}</router-link></td>
-                                <td class="p-3 text-gray-700">{{ transaction.amount }}</td>
+                                <td class="p-3 text-gray-700">{{ transaction.amount.toLocaleString() }}</td>
                                 <td class="p-3 text-gray-700">{{ transaction.currency }}</td>
                                 <td class="p-3 text-gray-700">{{ transaction.type }}</td>
                                 <td class="p-3 text-gray-700">{{ transaction.created_at }}</td>
