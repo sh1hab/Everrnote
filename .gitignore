@@ -15,8 +15,6 @@ yarn-error.log
 /.idea
 /.vscode
 /vue/.vscode/
-package.json
-package-lock.json
 !Procfile
 /vue/node_modules/
 /_ide_helper.php
