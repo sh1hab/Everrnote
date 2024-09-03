@@ -1,47 +1,58 @@
-# Everrnote Full Stack Application
+# Everrnote
 
-<table>
-    <tr>
-        <td>
-            <a href="https://laravel.com"><img src="https://i.imgur.com/pBNT1yy.png"  alt=""/></a>
-        </td>
-        <td>
-            <a href="https://vuejs.org/"><img src="https://i.imgur.com/BxQe48y.png"  alt=""/></a>
-        </td>
-        <td>
-            <a href="https://tailwindcss.com/"><img src="https://i.imgur.com/wdYXsgR.png"  alt=""/></a>
-        </td>
-        <td>
-            <img src="https://i.imgur.com/Kp5kTUp.png"  alt=""/>
-        </td>
-    </tr>
-</table> 
+This is a application 
+
+## Table of Contents
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+
+## Features
+
+- Notes
+
+- Transactions
 
 
 ## Requirements
-You need to have PHP version **8.0** or above. Node.js version **12.0** or above.
 
-## Demo
-
+- PHP >= 8.0
+- Composer
+- Nosql/Mongodb preferred 
+- Redis
 
 ## Installation
 
-#### Backend
-1. Clone the project
-2. Go to the project root directory
-3. Run `composer install`
-4. Create Database
-5. Copy `.env.example` into `.env` file and adjust parameters
-6. Run `php artisan serve` to start the project at http://localhost:8000
+1. **Composer installation:**
+   ```bash
+   composer install
 
-#### Frontend
-1. Navigate to `vue` folder using terminal
-2. Run `npm install` to install vue.js project dependencies
-3. Copy `vue/.env.example` into `vue/.env` & specify API URL
-4. Start frontend by running `npm run dev`
-5. Open http://localhost:3000
+2. **Run the migrations:**
+   ```bash
+   php artisan migrate
+
+3. **Run server:**
+   ```bash
+   php artisan serv
+
+## Configuration
+#### configure .env file for customization
+###### example: change of database
+
+## Usage
+
+**Run commands.sh file:**
+   ```bash
+      commands.sh
+   ```
+
+**Run Queue:**
+   ```bash
+      php artisan queue:work
+   ```
 
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
