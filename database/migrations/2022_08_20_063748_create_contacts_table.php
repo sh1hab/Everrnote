@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
-            $table->text('address')->default('');
+            $table->text('address');
             $table->string('password')->nullable();
             $table->tinyInteger('is_password_active')->default(0);
             $table->string('work_or_education_institute')->nullable();
