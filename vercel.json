@@ -6,15 +6,16 @@
             "runtime": "vercel-php@0.6.0"
         }
     },
-     "rewrites": [
+    "routes": [
         {
-            "source": "/(.*)",
-            "destination": "/public/index.php"
+            "src": "/(.*)",
+            "dest": "/api/index.php"
         }
     ],
     "env": {
         "APP_ENV": "staging",
         "APP_DEBUG": "true",
+        "APP_KEY": "=base64:mGMuQ2wWk6ylHEPkNXRYfrK3qQUtmuPi1dneU8HYXiw=",
         "APP_URL": "https://restaurant-menu-laravel.vercel.app",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
