@@ -60,14 +60,15 @@
                                 <th class="p-3 text-sm font-semibold">NO.</th>
                                 <th class="p-3 text-sm font-semibold">Name</th>
                                 <th class="p-3 text-sm font-semibold">Email</th>
+                                <th class="p-3">NID</th>
                                 <th class="p-3 text-sm font-semibold">Phone No</th>
-                                <th class="p-3 text-sm font-semibold">Password</th>
-                                <th class="p-3 text-sm font-semibold">Is Password Active</th>
                                 <th class="p-3 text-sm font-semibold">Work/University</th>
                                 <th class="p-3 text-sm font-semibold">Nationality</th>
                                 <th class="p-3 text-sm font-semibold">Address</th>
                                 <th class="p-3 text-sm font-semibold">Facebook</th>
                                 <th class="p-3 text-sm font-semibold">Starred</th>
+                                <th class="p-1 text-sm font-semibold">Is Password Active</th>
+                                <th class="p-3 text-sm font-semibold">Password</th>
                             </tr>
                         </thead>
 
@@ -76,14 +77,15 @@
                                 <td class="p-3"><router-link :to="{ name: 'ContactView', params: {id: contact.id}}"  class="font-bold text-blue-500 hover:underline">{{ index + 1 }}</router-link></td>
                                 <td class="p-3 text-gray-700">{{ contact.name }}</td>
                                 <td class="p-3 text-gray-700">{{ contact.email }}</td>
+                                <td class="p-3 text-gray-700">{{ contact.nid }}</td>
                                 <td class="p-3 text-gray-700">{{ contact.phone_number }}</td>
-                                <td class="p-3 text-gray-700">{{ contact.password }}</td>
-                                <td class="p-3 text-gray-700">{{ contact.is_password_active }}</td>
                                 <td class="p-3 text-gray-700">{{ contact.work_or_education_institute }}</td>
                                 <td class="p-3 text-gray-700">{{ contact.nationality }}</td>
                                 <td class="p-3 text-gray-700">{{ contact.address }}</td>
                                 <td class="p-3 text-gray-700">{{ contact.facebook }}</td>
                                 <td class="p-3 text-gray-700">{{ contact.starred }}</td>
+                                <td class="p-3 text-gray-700">{{ contact.is_password_active }}</td>
+                                <td class="p-3 text-gray-700">{{ contact.password }}</td>
                             </tr>
                         </tbody>
                     </table>

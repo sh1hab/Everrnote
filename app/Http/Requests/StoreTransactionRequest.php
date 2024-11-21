@@ -20,7 +20,7 @@ class StoreTransactionRequest extends FormRequest
     /**
      * @return void
      */
-    function prepareForValidation(): void
+    public function prepareForValidation(): void
     {
         $this->merge([
             'user_id' => $this->user()->id
@@ -34,12 +34,12 @@ class StoreTransactionRequest extends FormRequest
      */
     public function rules(): array
     {
-
         return [
             'amount' => 'required',
             'type' => 'required|string',
             'user_id' => "exists:".User::class.",id",
+            'notes' => 'string',
+            'currency' => 'string',
         ];
     }
-
 }

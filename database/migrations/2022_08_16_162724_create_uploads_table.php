@@ -11,12 +11,14 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('uploads', function (Blueprint $table) {
             $table->id();
             $table->string('url')->nullable();
             $table->enum('type', ['image', 'audio', 'video', 'file']);
+            $table->string('uploadable_id');
+            $table->string('uploadable_type');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,7 +29,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('uploads');
     }
