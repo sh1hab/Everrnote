@@ -21,4 +21,5 @@ yarn-error.log
 /_ide_helper_models.php
 notes.md
 dist
-
+/.vercel
+/mongo-php-driver
