@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
 
 class AuthController extends BaseApiController
 {
+    public function __construct(){}
+
     /**
      * @param RegisterRequest $request
      * @return JsonResponse
@@ -37,7 +39,6 @@ class AuthController extends BaseApiController
         } catch (Exception $e) {
             return $this->sendError((array)$e->getMessage(), 500);
         }
-
     }
 
     /**
